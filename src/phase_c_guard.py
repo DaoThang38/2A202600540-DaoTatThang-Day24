@@ -59,7 +59,6 @@ def pii_scan(text: str, analyzer=None, anonymizer=None) -> dict:
           "anonymized": str,   # text với PII được thay bằng <TYPE>
         }
     """
-    # TODO: Implement
     if analyzer is None or anonymizer is None:
         analyzer, anonymizer = setup_presidio()
     #
@@ -101,7 +100,6 @@ async def check_input_rail(text: str, rails=None) -> dict:
           "response":       str,          # NeMo's raw response
         }
     """
-    # TODO: Implement
     if rails is None:
         rails = setup_nemo_rails()
     #
@@ -110,11 +108,12 @@ async def check_input_rail(text: str, rails=None) -> dict:
     )
     # NeMo từ chối bằng cách trả về refuse message được định nghĩa trong rails.co
     refuse_keywords = ["xin lỗi", "không thể", "không được phép", "i cannot", "i'm sorry"]
-    blocked = any(kw in response.lower() for kw in refuse_keywords)
+    response_text = response if isinstance(response, str) else response.get('content', str(response))
+    blocked = any(kw in response_text.lower() for kw in refuse_keywords)
     return {
         "allowed":        not blocked,
         "blocked_reason": "nemo_input_rail" if blocked else None,
-        "response":       response,
+        "response":       response_text,
     }
 
 
@@ -131,7 +130,6 @@ async def check_output_rail(question: str, answer: str, rails=None) -> dict:
           "final_answer":   str,          # answer đã qua guard (có thể bị redact)
         }
     """
-    # TODO: Implement
     if rails is None:
         rails = setup_nemo_rails()
     #
@@ -141,11 +139,12 @@ async def check_output_rail(question: str, answer: str, rails=None) -> dict:
         {"role": "assistant", "content": answer},   # output cần kiểm tra
     ])
     refuse_keywords = ["xin lỗi", "không thể cung cấp", "i cannot"]
-    flagged = any(kw in response.lower() for kw in refuse_keywords)
+    response_text = response if isinstance(response, str) else response.get('content', str(response))
+    flagged = any(kw in response_text.lower() for kw in refuse_keywords)
     return {
         "safe":           not flagged,
         "flagged_reason": "nemo_output_rail" if flagged else None,
-        "final_answer":   response if flagged else answer,
+        "final_answer":   response_text if flagged else answer,
     }
 
 
@@ -168,7 +167,6 @@ def run_adversarial_suite(adversarial_set: list[dict], rails=None,
           "passed": bool,
         }
     """
-    # TODO: Implement
     async def _run_all():
         results = []
         for item in adversarial_set:
@@ -225,7 +223,6 @@ def measure_p95_latency(test_inputs: list[str], n_runs: int = 20,
           "budget_ms": int,
         }
     """
-    # TODO: Implement
     presidio_times, nemo_times, total_times = [], [], []
     #
     async def _measure():

@@ -39,7 +39,6 @@ def pairwise_judge(question: str, answer_a: str, answer_b: str) -> dict:
     Returns:
         {"winner": "A"|"B"|"tie", "reasoning": str, "scores": {"A": float, "B": float}}
     """
-    # TODO: Implement
     PROMPT_TEMPLATE = '''Bạn là một expert đánh giá chất lượng câu trả lời RAG.
     #
     Câu hỏi: {question}
@@ -84,7 +83,6 @@ def swap_and_average(question: str, answer_a: str, answer_b: str) -> JudgeResult
         Final:   nếu winner_1 == winner_2 → final = winner_1
                  nếu khác nhau → final = "tie"
     """
-    # TODO: Implement
     pass1 = pairwise_judge(question, answer_a, answer_b)
     pass2_raw = pairwise_judge(question, answer_b, answer_a)  # SWAP!
     #
@@ -137,7 +135,6 @@ def cohen_kappa(judge_labels: list[int], human_labels: list[int]) -> float:
         κ = (p_o - p_e) / (1 - p_e) if p_e != 1 else 0
         return κ
     """
-    # TODO: Implement
     from sklearn.metrics import cohen_kappa_score
     return cohen_kappa_score(human_labels, judge_labels)
 # ─── Task 8: Bias Report ──────────────────────────────────────────────────────
@@ -165,7 +162,6 @@ def bias_report(judge_results: list[JudgeResult]) -> dict:
           "interpretation": str,
         }
     """
-    # TODO: Implement
     total = len(judge_results)
     if total == 0:
         return {"total_judged": 0, "position_bias_rate": 0.0, "verbosity_bias": 0.0}
