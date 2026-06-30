@@ -62,7 +62,7 @@ def pii_scan(text: str, analyzer=None, anonymizer=None) -> dict:
     if analyzer is None or anonymizer is None:
         analyzer, anonymizer = setup_presidio()
     #
-    results = analyzer.analyze(text=text, language=PRESIDIO_LANGUAGE, entities=["VN_CCCD", "VN_PHONE", "EMAIL"])
+    results = analyzer.analyze(text=text, language=PRESIDIO_LANGUAGE, entities=["VN_CCCD", "VN_PHONE", "EMAIL_ADDRESS"])
     if not results:
         return {"has_pii": False, "entities": [], "anonymized": text}
     #
