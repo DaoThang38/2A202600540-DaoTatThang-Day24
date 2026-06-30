@@ -109,7 +109,7 @@ async def check_input_rail(text: str, rails=None) -> dict:
     # NeMo từ chối bằng cách trả về refuse message được định nghĩa trong rails.co
     refuse_keywords = ["xin lỗi", "không thể", "không được phép", "i cannot", "i'm sorry"]
     response_text = response if isinstance(response, str) else response.get('content', str(response))
-    blocked = any(kw in response_text.lower() for kw in refuse_keywords)
+    blocked = any(kw in response_text.lower() for kw in refuse_keywords) or response_text.strip() == ""
     return {
         "allowed":        not blocked,
         "blocked_reason": "nemo_input_rail" if blocked else None,
